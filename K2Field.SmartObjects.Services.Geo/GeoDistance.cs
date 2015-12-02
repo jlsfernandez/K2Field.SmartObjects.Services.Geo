@@ -14,7 +14,7 @@ namespace K2Field.SmartObjects.Services.Geo
     [Attributes.ServiceObject("GeoDistance", "Geo Distance", "Geo Distance")]
     public class GeoDistance
     {
-        const string _decimalFormat = "#.######";
+        //const string _decimalFormat = "#.##";
 
         public ServiceConfiguration ServiceConfiguration { get; set; }
 
@@ -45,6 +45,23 @@ namespace K2Field.SmartObjects.Services.Geo
         [Attributes.Property("DistanceMiles", SoType.Decimal, "Distance Miles", "Distance Miles")]
         public double DistanceMiles { get; set; }
 
+
+
+        [Attributes.Property("DistanceMetresDisplay", SoType.Text, "Distance Metres Display", "Distance Metres Display")]
+        public string DistanceMetresDisplay { get; set; }
+
+        [Attributes.Property("DistanceYardsDisplay", SoType.Decimal, "Distance Yards Display", "Distance Yards Display")]
+        public string DistanceYardsDisplay { get; set; }
+
+        [Attributes.Property("DistanceKilometresDisplay", SoType.Decimal, "Distance Kilometres Display", "Distance Kilometres Display")]
+        public string DistanceKilometresDisplay { get; set; }
+
+        [Attributes.Property("DistanceMilesDisplay", SoType.Decimal, "Distance Miles Display", "Distance Miles Display")]
+        public string DistanceMilesDisplay { get; set; }
+
+
+        
+        
         [Attributes.Property("WithinRange", SoType.YesNo, "Within Range", "Within Range")]
         public bool WithinRange { get; set; }
 
@@ -67,11 +84,13 @@ namespace K2Field.SmartObjects.Services.Geo
         [Attributes.Method("DistanceBetweenMetric", SourceCode.SmartObjects.Services.ServiceSDK.Types.MethodType.Read, "Distance Between Metric", "Distance Between Metric",
         new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde" }, //required property array (no required properties for this sample)
         new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde" }, //input property array (no optional input properties for this sample)
-        new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde", "DistanceMetres", "DistanceKilometres", "ResultStatus", "ResultMessage" })]
+        new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde", "DistanceMetres", "DistanceKilometres", "DistanceMetresDisplay", "DistanceKilometresDisplay", "ResultStatus", "ResultMessage" })]
         public GeoDistance DistanceBetweenMetric()
         {
             try
             {
+                string decimalFormat = ServiceConfiguration["DecimalFormat"].ToString();
+
                 System.Device.Location.GeoCoordinate primaryCoords = new System.Device.Location.GeoCoordinate(this.PrimaryLatitude, this.PrimaryLongitutde);
                 System.Device.Location.GeoCoordinate secondaryCoords = new System.Device.Location.GeoCoordinate(this.SecondaryLatitude, this.SecondaryLongitutde);
 
@@ -79,6 +98,10 @@ namespace K2Field.SmartObjects.Services.Geo
 
                 this.DistanceMetres = distanceMetres;
                 this.DistanceKilometres = distanceMetres / 1000;
+
+                this.DistanceMetresDisplay = this.DistanceMetres.ToString(decimalFormat);
+                this.DistanceKilometresDisplay = this.DistanceKilometres.ToString(decimalFormat);
+
                 this.ResultStatus = "OK";
 
                 return this;
@@ -95,11 +118,13 @@ namespace K2Field.SmartObjects.Services.Geo
         [Attributes.Method("DistanceBetweenImperial", SourceCode.SmartObjects.Services.ServiceSDK.Types.MethodType.Read, "Distance Between Imperial", "Distance Between Imperial",
         new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde" }, //required property array (no required properties for this sample)
         new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde" }, //input property array (no optional input properties for this sample)
-        new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde", "DistanceYards", "DistanceMiles", "ResultStatus", "ResultMessage" })]
+        new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde", "DistanceYards", "DistanceMiles", "DistanceYardsDisplay", "DistanceMilesDisplay", "ResultStatus", "ResultMessage" })]
         public GeoDistance DistanceBetweenImperial()
         {
             try
             {
+                string decimalFormat = ServiceConfiguration["DecimalFormat"].ToString();
+
                 System.Device.Location.GeoCoordinate primaryCoords = new System.Device.Location.GeoCoordinate(this.PrimaryLatitude, this.PrimaryLongitutde);
                 System.Device.Location.GeoCoordinate secondaryCoords = new System.Device.Location.GeoCoordinate(this.SecondaryLatitude, this.SecondaryLongitutde);
 
@@ -107,6 +132,10 @@ namespace K2Field.SmartObjects.Services.Geo
 
                 this.DistanceYards = distanceMetres * 1.09361;
                 this.DistanceMiles = this.DistanceYards / 1760;
+
+                this.DistanceYardsDisplay = this.DistanceYards.ToString(decimalFormat);
+                this.DistanceMilesDisplay = this.DistanceMiles.ToString(decimalFormat);
+
                 this.ResultStatus = "OK";
 
                 return this;
@@ -122,12 +151,14 @@ namespace K2Field.SmartObjects.Services.Geo
 
         [Attributes.Method("WithinRangeMetric", SourceCode.SmartObjects.Services.ServiceSDK.Types.MethodType.Read, "Within Range Metric", "Within Range Metric",
         new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde", "RangeMetres" }, 
-        new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde", "RangeMetres" }, 
-        new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde", "RangeMetres", "WithinRange", "DistanceMetres", "DistanceKilometres", "ResultStatus", "ResultMessage" })]
+        new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde", "RangeMetres" },
+        new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde", "RangeMetres", "WithinRange", "DistanceMetres", "DistanceKilometres", "DistanceMetresDisplay", "DistanceKilometresDisplay", "ResultStatus", "ResultMessage" })]
         public GeoDistance WithinRangeMetric()
         {
             try
             {
+                string decimalFormat = ServiceConfiguration["DecimalFormat"].ToString();
+
                 System.Device.Location.GeoCoordinate primaryCoords = new System.Device.Location.GeoCoordinate(this.PrimaryLatitude, this.PrimaryLongitutde);
                 System.Device.Location.GeoCoordinate secondaryCoords = new System.Device.Location.GeoCoordinate(this.SecondaryLatitude, this.SecondaryLongitutde);
 
@@ -135,6 +166,9 @@ namespace K2Field.SmartObjects.Services.Geo
 
                 this.DistanceMetres = distanceMetres;
                 this.DistanceKilometres = distanceMetres / 1000;
+
+                this.DistanceMetresDisplay = this.DistanceMetres.ToString(decimalFormat);
+                this.DistanceKilometresDisplay = this.DistanceKilometres.ToString(decimalFormat);
 
                 if (distanceMetres <= this.RangeMetres)
                 {
@@ -161,11 +195,13 @@ namespace K2Field.SmartObjects.Services.Geo
         [Attributes.Method("WithinRangeImperial", SourceCode.SmartObjects.Services.ServiceSDK.Types.MethodType.Read, "Within Range Imperial", "Within Range Imperial",
         new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde", "RangeYards" }, //required property array (no required properties for this sample)
         new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde", "RangeYards" }, //input property array (no optional input properties for this sample)
-        new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde", "RangeYards", "WithinRange", "DistanceYards", "DistanceMiles", "ResultStatus", "ResultMessage" })]
+        new string[] { "PrimaryLatitude", "PrimaryLongitutde", "SecondaryLatitude", "SecondaryLongitutde", "RangeYards", "WithinRange", "DistanceYards", "DistanceMiles", "DistanceYardsDisplay", "DistanceMilesDisplay", "ResultStatus", "ResultMessage" })]
         public GeoDistance WithinRangeImperial()
         {
             try
             {
+                string decimalFormat = ServiceConfiguration["DecimalFormat"].ToString();
+
                 System.Device.Location.GeoCoordinate primaryCoords = new System.Device.Location.GeoCoordinate(this.PrimaryLatitude, this.PrimaryLongitutde);
                 System.Device.Location.GeoCoordinate secondaryCoords = new System.Device.Location.GeoCoordinate(this.SecondaryLatitude, this.SecondaryLongitutde);
 
@@ -173,6 +209,9 @@ namespace K2Field.SmartObjects.Services.Geo
 
                 this.DistanceYards = distanceMetres * 1.09361;
                 this.DistanceMiles = this.DistanceYards / 1760;
+
+                this.DistanceYardsDisplay = this.DistanceYards.ToString(decimalFormat);
+                this.DistanceMilesDisplay = this.DistanceMiles.ToString(decimalFormat);
 
                 if (this.DistanceYards <= this.RangeYards)
                 {

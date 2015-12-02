@@ -51,7 +51,7 @@ namespace K2Field.SmartObjects.Services.Geo
         /// <returns>config section (required by infrastructure)</returns>
         public override string GetConfigSection()
         {
-            //Service.ServiceConfiguration.Add("TwitterUsername", true, "");
+            Service.ServiceConfiguration.Add("DecimalFormat", true, "#.##");
 
             //Service.ServiceConfiguration.Add("BingMapsKey", true, "");
             //Service.ServiceConfiguration.Add(StringResources.SharePointURL, false, string.Empty);
